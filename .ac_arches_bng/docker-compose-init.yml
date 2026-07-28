@@ -1,0 +1,23 @@
+
+services:
+    arches-bng-0941b:
+      container_name: arches-bng-0941b
+      image: he/arches_bng-0941b:base
+      build:
+        args:
+          - "PROJ_NAME=arches_bng"
+          - "PROJ_REPO_NAME=arches-bng"
+          - "DOCKER_PATH=./arches-bng/.ac_arches_bng/docker"
+        context: ../..
+        dockerfile: ./arches-bng/.ac_arches_bng/Dockerfile
+        target: base
+      command: create_project
+      volumes:
+        - ../..:/web_root
+      env_file:
+        - ./docker/env_file.env
+      ports:
+        - 8002:8000
+        - 5678:5678
+      stdin_open: true
+      tty: true

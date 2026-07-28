@@ -1,0 +1,92 @@
+
+services:
+    arches-bng-0941b:
+      container_name: arches-bng-0941b
+      image: he/arches_bng-0941b:dev_build
+      build:
+        args:
+          - "PROJ_NAME=arches_bng"
+          - "PROJ_REPO_NAME=arches-bng"
+          - "DOCKER_PATH=./arches-bng/.ac_arches_bng/docker"
+        context: ../..
+        dockerfile: ./arches-bng/.ac_arches_bng/Dockerfile
+        target: dev
+      command: run_arches
+      volumes:
+        - ../../arches:/web_root/arches
+        - ../../arches-bng:/web_root/arches_bng
+        - ./docker:/web_root/docker
+        - ../../arches-bng-package:/web_root/arches_bng_package
+        - ../../arches-bng-data:/web_root/arches_bng_data
+      env_file:
+        - ./docker/env_file.env
+      ports:
+        - 8002:8000
+        - 5678:5678
+      stdin_open: true
+      tty: true
+    
+    ## - possible 
+    #arches-bng-bash:
+    #  profiles:
+    #    - livereload
+    #  container_name: arches-bng-bash
+    #  image: he/arches_bng:dev_build
+    #  command: ["bash"]
+    #  volumes:
+    #    - ../../arches:/web_root/arches
+    #    - ../../arches-bng:/web_root/arches_bng
+    #    - ./docker:/web_root/docker
+    #    - ../../arches-bng-package:/web_root/arches_bng_package
+    #    - ../../arches-bng-data:/web_root/arches_bng_data
+    #  env_file:
+    #    - ./docker/env_file.env
+    #  ports:
+    #    - 35729:35729      
+    #  depends_on:
+    #      - arches-bng-0941b
+    #  stdin_open: true
+    #  tty: true
+
+    arches-bng-0941b-livereload:
+      profiles:
+        - livereload
+      container_name: arches-bng-0941b-livereload
+      image: he/arches_bng-0941b:dev_build
+      command: run_livereload
+      volumes:
+        - ../../arches:/web_root/arches
+        - ../../arches-bng:/web_root/arches_bng
+      env_file:
+        - ./docker/env_file.env
+      ports:
+        - 35729:35729      
+      depends_on:
+          - arches-bng-0941b
+      stdin_open: true
+      tty: true
+    
+    arches-bng-0941b-webpack:
+      container_name: arches-bng-0941b-webpack
+      image: he/arches_bng-0941b:dev_build
+      command: run_webpack
+      volumes:
+        - ../../arches:/web_root/arches
+        - ../../arches-bng:/web_root/arches_bng
+      env_file:
+        - ./docker/env_file.env
+      ports:
+        - 8028:8021
+      depends_on:
+          - arches-bng-0941b
+      stdin_open: true
+      tty: true
+
+networks:
+  default:
+    external: true
+    name: arches-bng-0941b-network
+
+volumes:
+    arches-log-0941b:
+    arches-static-0941b:
