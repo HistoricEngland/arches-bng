@@ -1,0 +1,31 @@
+{% extends "javascript.htm" %}
+
+{% load static %}
+{% load l10n %}
+{% load i18n %}
+
+{% block arches_translations %}
+{{ block.super }}
+<div
+    class='arches-translations'
+    coordFormatLabel='{% trans "Coordinate Format" %} "{{ coordFormatLabel|escapejs }}"'
+    nGR='{% trans "National Grid Reference" %} "{{ nGR|escapejs }}"'
+    coordFormatDescription='{% trans "Select input coordinate format from drop down list:" %} "{{ coordFormatDescription|escapejs }}"'
+    centralPointCoordinate='{% trans "Central Point Coordinate" %} "{{ centralPointCoordinate|escapejs }}"'
+    centralPointDescription='{% trans "Enter the central coordinate of the record in either of the following formats:" %} "{{ centralPointDescription|escapejs }}"'
+    alphanumericBNGExample='{% trans "Alphanumeric BNG: SU1025169962" %} "{{ alphanumericBNGExample|escapejs }}"'
+    absoluteBNGExample='{% trans "Absolute BNG: 410251,169962" %} "{{ absoluteBNGExample|escapejs }}"'
+    longLatExample='{% trans "Long/Lat: -1.853942,51.428572" %} "{{ longLatExample|escapejs }}"'
+    previewLabel='{% trans "Preview" %} "{{ previewLabel|escapejs }}"'
+    bngNodeLabel='{% trans "BNG Node" %} "{{ bngNodeLabel|escapejs }}"'
+    geojsonNodeLabel='{% trans "GeoJSON Node" %} "{{ geojsonNodeLabel|escapejs }}"'
+    bngFilterInstruction='{% trans "Filter by British National Grid" %} "{{ bngFilterInstruction|escapejs }}"'
+    gridReferenceLabel='{% trans "Grid reference:" %} "{{ gridReferenceLabel|escapejs }}"'
+    gridReferenceInfo='{% trans "Enter a valid British National Grid reference to create a grid square to search within - example: TG514131. Use a 12 character grid reference to create a point and this will auto-populate the X and Y input boxes." %} "{{ gridReferenceInfo|escapejs }}"'
+    xLabel='{% trans "X:" %} "{{ xLabel|escapejs }}"'
+    yLabel='{% trans "Y:" %} "{{ yLabel|escapejs }}"'
+    bufferLabel='{% trans "Buffer radius in metres:" %} "{{ bufferLabel|escapejs }}"'
+    xyReferenceInfo='{% trans "Enter valid 6 digit x (eastings) and y (northings) coordinates to create a point to search with. This will autopopulate the Grid Reference input box" %} "{{ xyReferenceInfo|escapejs }}"'
+    bufferInfo='{% trans "Set a buffer distance in meters to extend the search area." %} "{{ bufferInfo|escapejs }}"'
+></div>
+{% endblock arches_translations %}
