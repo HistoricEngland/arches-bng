@@ -3,12 +3,16 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "arches_bng"
+name = "arches-bng"
+description = "An Arches extension app providing support for functionality relating to the British National Grid (BNG) coordinate system."
 readme = "README.md"
-authors = []
+version = "1.0.0"
 license = {text = "GNU AGPL3"}
+authors = []
+maintainers = [{name = "Historic England", email = "donotreply@historicengland.org.uk"}]
+keywords = ["arches", "extension", "django", "heritage", "historic-data", "coordinate-system", "bng", "british-national-grid", "datatype","widget","function","spatial-filter"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
@@ -26,7 +30,11 @@ requires-python = ">=3.10"
 dependencies = [
     "arches>=7.6.22,<7.7.0",
 ]
-version = "0.0.1"
+[project.urls]
+Homepage = "https://github.com/HistoricEngland/arches-bng"
+Repository = "https://github.com/HistoricEngland/arches-bng.git"
+Issues = "https://github.com/HistoricEngland/arches-bng/issues"
+Changelog = "https://github.com/HistoricEngland/arches-bng/releases"
 
 [project.optional-dependencies]
 dev = [
@@ -38,5 +46,9 @@ dev = [
     "black==24.4.2",
 ]
 
+[tool.setuptools.packages.find]
+include = ["arches_bng*"]
+exclude = ["arches_bng.logs*"]
+
 [tool.setuptools]
-packages = ["arches_bng"]
+include-package-data = true
