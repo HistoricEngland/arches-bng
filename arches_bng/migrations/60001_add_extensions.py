@@ -18,7 +18,9 @@ class Migration(migrations.Migration):
     def add_functions(apps, schema_editor):
         Function = apps.get_model("models", "Function")
 
-        if not Function.objects.filter(functionid="0434df8d-b98a-4b41-9a0a-68cd9214ad73").exists():
+        if not Function.objects.filter(
+            functionid="0434df8d-b98a-4b41-9a0a-68cd9214ad73"
+        ).exists():
             Function.objects.update_or_create(
                 name="BNG Point to GeoJSON",
                 functiontype="node",
@@ -36,7 +38,9 @@ class Migration(migrations.Migration):
                 functionid="0434df8d-b98a-4b41-9a0a-68cd9214ad73",
             )
 
-        if not Function.objects.filter(functionid="d9a01773-6092-4cad-b331-ae725ae8fa88").exists():
+        if not Function.objects.filter(
+            functionid="d9a01773-6092-4cad-b331-ae725ae8fa88"
+        ).exists():
             Function.objects.update_or_create(
                 name="GeoJSON to BNG Point",
                 functiontype="node",
@@ -57,12 +61,16 @@ class Migration(migrations.Migration):
     def add_widgets(apps, schema_editor):
         Widget = apps.get_model("models", "Widget")
 
-        if not Widget.objects.filter(pk="bcae8e90-09f7-4ae3-906b-7c7bb71a6ddf").exists():
+        if not Widget.objects.filter(
+            pk="bcae8e90-09f7-4ae3-906b-7c7bb71a6ddf"
+        ).exists():
             Widget.objects.update_or_create(
                 widgetid="bcae8e90-09f7-4ae3-906b-7c7bb71a6ddf",
                 name="bngpoint",
                 component="views/components/widgets/bngpoint",
-                defaultconfig={"placeholder": "Enter the centre point map reference of the resource."},
+                defaultconfig={
+                    "placeholder": "Enter the centre point map reference of the resource."
+                },
                 helptext=None,
                 datatype="bngcentrepoint",
             )
@@ -101,9 +109,8 @@ class Migration(migrations.Migration):
                 "type": "bng-filter-type",
                 "componentpath": "views/components/search/bng-filter",
                 "componentname": "bng-filter",
-            }
+            },
         )
-        
 
     def remove_functions(apps, schema_editor):
         Function = apps.get_model("models", "Function")
@@ -125,7 +132,6 @@ class Migration(migrations.Migration):
             ]
         ):
             search_component.delete()
-        
 
     operations = [
         migrations.RunPython(add_functions, remove_functions),
