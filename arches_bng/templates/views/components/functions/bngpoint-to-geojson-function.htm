@@ -4,7 +4,7 @@
   <div class="row widget-container">
     <div class="form-group">
       <div class="col-xs-12">
-        <label class="col-xs-12 control-label widget-input-label" for="bngNode" data-bind="text: bngNodeLabel"></label>
+        <label class="col-xs-12 control-label widget-input-label" for="bngNode" data-bind="text: $root.translations.bngNodeLabel"></label>
         <select data-placeholder="{% trans "Choose a card." %}"
           data-bind="chosen: {width: '100%', disable_search_threshold: 15}, value: bng_node, options: nodesBNG, optionsText: 'name', optionsValue: 'nodeid', valueAllowUnset: true"
           id="bngNode"></select>
@@ -13,7 +13,7 @@
 
     <div class="form-group">
       <div class="col-xs-12">
-        <label class="col-xs-12 control-label widget-input-label" for="geojsonNode" data-bind="text: geojsonNodeLabel"></label>
+        <label class="col-xs-12 control-label widget-input-label" for="geojsonNode" data-bind="text: $root.translations.geojsonNodeLabel"></label>
         <select data-placeholder="{% trans "Choose a card." %}"
           data-bind="chosen: {width: '100%', disable_search_threshold: 15}, value: geojson_node, options: nodesGeoJSON, optionsText: 'name', optionsValue: 'nodeid', valueAllowUnset: true"
           id="geojsonNode"></select>
