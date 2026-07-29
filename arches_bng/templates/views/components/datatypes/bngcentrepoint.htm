@@ -12,6 +12,6 @@
 </div>
 
 <div class="col-md-8 col-lg-9" data-bind="visible: op() !== 'null' && op() !== 'not_null'">
-    <input type="text" placeholder='$root.translations.nGR' class="form-control input-lg" style="height: 36px;" data-bind="value: searchValue, valueUpdate: 'keyup'">
+    <input type="text" class="form-control input-lg" style="height: 36px;" data-bind="value: searchValue, valueUpdate: 'keyup', attr: {placeholder: $root.translations.ngrLabel}">
 </div>
 <!-- /ko -->
