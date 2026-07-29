@@ -141,8 +141,12 @@ class BNGPointToGeoJSON(BaseFunction):
             bngValueNumbers = bngValueReturned[2:]
             splitSection = int(len(bngValueNumbers) / 2)
             gridSquareNumbers = gridSquare[gridSquareLetters]
-            eastingValue = str(gridSquareNumbers[0]) + str(bngValueNumbers[:splitSection])
-            northingValue = str(gridSquareNumbers[1]) + str(bngValueNumbers[splitSection:])
+            eastingValue = str(gridSquareNumbers[0]) + str(
+                bngValueNumbers[:splitSection]
+            )
+            northingValue = str(gridSquareNumbers[1]) + str(
+                bngValueNumbers[splitSection:]
+            )
             osgb36PointString = "POINT (" + eastingValue + " " + northingValue + ")"
             osgb36Point = GEOSGeometry(osgb36PointString, srid=27700)
             osgb36Point.transform(4326, False)
@@ -158,7 +162,10 @@ class BNGPointToGeoJSON(BaseFunction):
                 "geometry": pointGeoJSON,
                 "type": "Feature",
                 "id": str(uuidForRecord),
-                "properties": {"datetime": dt.strftime("%d/%m/%Y %H:%M:%S"), "bngref": str(bngValueReturned)},
+                "properties": {
+                    "datetime": dt.strftime("%d/%m/%Y %H:%M:%S"),
+                    "bngref": str(bngValueReturned),
+                },
             }
 
             geometryValue = {"type": "FeatureCollection", "features": [bngFeature]}
@@ -188,7 +195,8 @@ class BNGPointToGeoJSON(BaseFunction):
                 tileid_to_refresh = tile.tileid
             else:
                 previously_saved_tiles = Tile.objects.filter(
-                    nodegroup_id=self.config["geojson_nodegroup"], resourceinstance_id=tile.resourceinstance_id
+                    nodegroup_id=self.config["geojson_nodegroup"],
+                    resourceinstance_id=tile.resourceinstance_id,
                 )
 
                 if len(previously_saved_tiles) > 0:
@@ -204,9 +212,13 @@ class BNGPointToGeoJSON(BaseFunction):
                         tileid_to_refresh = p.tileid
                 else:
                     new_geojson_tile = Tile().get_blank_tile_from_nodegroup_id(
-                        self.config["geojson_nodegroup"], resourceid=tile.resourceinstance_id, parenttile=tile.parenttile
+                        self.config["geojson_nodegroup"],
+                        resourceid=tile.resourceinstance_id,
+                        parenttile=tile.parenttile,
                     )
-                    new_geojson_tile.data[self.config["geojson_node"]] = geometryValueJson
+                    new_geojson_tile.data[self.config["geojson_node"]] = (
+                        geometryValueJson
+                    )
 
                     if self.config["geojson_nodegroup"] in new_geojson_tile.data:
                         del new_geojson_tile.data[self.config["geojson_nodegroup"]]

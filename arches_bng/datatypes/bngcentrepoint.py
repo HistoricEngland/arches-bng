@@ -22,7 +22,16 @@ details = {
 
 
 class BNGCentreDataType(BaseDataType):
-    def validate(self, value, row_number=None, source=None, node=None, nodeid=None, strict=False, **kwargs):
+    def validate(
+        self,
+        value,
+        row_number=None,
+        source=None,
+        node=None,
+        nodeid=None,
+        strict=False,
+        **kwargs,
+    ):
 
         errors = []
         gridSquareArray = [
@@ -139,7 +148,9 @@ class BNGCentreDataType(BaseDataType):
 
     def append_to_document(self, document, nodevalue, nodeid, tile, provisional=False):
 
-        document["strings"].append({"string": nodevalue, "nodegroup_id": tile.nodegroup_id})
+        document["strings"].append(
+            {"string": nodevalue, "nodegroup_id": tile.nodegroup_id}
+        )
 
     def get_search_terms(self, nodevalue, nodeid=None):
         return [SearchTerm(value=nodevalue)]
@@ -151,7 +162,11 @@ class BNGCentreDataType(BaseDataType):
                 self.append_null_search_filters(value, node, query, request)
             elif value["val"] != "":
                 match_type = "phrase_prefix" if "~" in value["op"] else "phrase"
-                match_query = Match(field="tiles.data.%s" % (str(node.pk)), query=value["val"], type=match_type)
+                match_query = Match(
+                    field="tiles.data.%s" % (str(node.pk)),
+                    query=value["val"],
+                    type=match_type,
+                )
                 if "!" in value["op"]:
                     query.must_not(match_query)
                     query.filter(Exists(field="tiles.data.%s" % (str(node.pk))))

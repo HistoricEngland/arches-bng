@@ -49,10 +49,16 @@ class BngFilter(BaseSearchFilter):
                     except:
                         grid_square_buffer = None
 
-                    dsl_geom = grid_square_geom if grid_square_buffer is None else grid_square_buffer
+                    dsl_geom = (
+                        grid_square_geom
+                        if grid_square_buffer is None
+                        else grid_square_buffer
+                    )
 
                     geoshape = GeoShape(
-                        field="geometries.geom.features.geometry", type=dsl_geom["type"], coordinates=dsl_geom["coordinates"]
+                        field="geometries.geom.features.geometry",
+                        type=dsl_geom["type"],
+                        coordinates=dsl_geom["coordinates"],
                     )
 
                     spatial_query = Bool()
@@ -62,17 +68,29 @@ class BngFilter(BaseSearchFilter):
                         spatial_query.filter(geoshape)
 
                     # get the nodegroup_ids that the user has permission to search
-                    spatial_query.filter(Terms(field="geometries.nodegroup_id", terms=permitted_nodegroups))
+                    spatial_query.filter(
+                        Terms(
+                            field="geometries.nodegroup_id", terms=permitted_nodegroups
+                        )
+                    )
 
                     if include_provisional is False:
-                        spatial_query.filter(Terms(field="geometries.provisional", terms=["false"]))
+                        spatial_query.filter(
+                            Terms(field="geometries.provisional", terms=["false"])
+                        )
 
                     elif include_provisional == "only provisional":
-                        spatial_query.filter(Terms(field="geometries.provisional", terms=["true"]))
+                        spatial_query.filter(
+                            Terms(field="geometries.provisional", terms=["true"])
+                        )
 
                     search_query.filter(Nested(path="geometries", query=spatial_query))
         else:
-            logger.warn(_(f"BNG Filter: BNG is not valid - must be an even number of chars ({bng})"))
+            logger.warn(
+                _(
+                    f"BNG Filter: BNG is not valid - must be an even number of chars ({bng})"
+                )
+            )
 
         search_query_object["query"].add_query(search_query)
 
@@ -80,7 +98,9 @@ class BngFilter(BaseSearchFilter):
             search_query_object[details["componentname"]] = {}
 
         try:
-            search_query_object[details["componentname"]]["grid_square"] = spatial_filter
+            search_query_object[details["componentname"]][
+                "grid_square"
+            ] = spatial_filter
         except NameError:
             logger.info(_("Feature geometry is not defined"))
 
@@ -112,8 +132,12 @@ class BngFilter(BaseSearchFilter):
             bngValueNumbers = bng_value[2:]
             splitSection = int(len(bngValueNumbers) / 2)
             gridSquareNumbers = grid_square[gridSquareLetters]
-            eastingValue = f"{str(gridSquareNumbers[0])}{str(bngValueNumbers[:splitSection])}"
-            northingValue = f"{str(gridSquareNumbers[1])}{str(bngValueNumbers[splitSection:])}"
+            eastingValue = (
+                f"{str(gridSquareNumbers[0])}{str(bngValueNumbers[:splitSection])}"
+            )
+            northingValue = (
+                f"{str(gridSquareNumbers[1])}{str(bngValueNumbers[splitSection:])}"
+            )
 
             xmin = self.pad_coord(eastingValue, "0", 6)
             xmax = self.pad_coord(eastingValue, "9", 6)
@@ -148,7 +172,9 @@ class BngFilter(BaseSearchFilter):
                     + "))"
                 )
 
-            bng_geom = self.transform_to_wgs84(GEOSGeometry(wkt_geom, srid=27700), from_srid=27700)
+            bng_geom = self.transform_to_wgs84(
+                GEOSGeometry(wkt_geom, srid=27700), from_srid=27700
+            )
             bng_geojson = json.loads(bng_geom.geojson)
 
             uuidForRecord = uuid4()
@@ -169,7 +195,11 @@ class BngFilter(BaseSearchFilter):
                     "geometry": bng_buffer_geojson,
                     "type": "Feature",
                     "id": str(uuidForRecord),
-                    "properties": {"type": "grid_square_buffer", "bngref": str(bng_value), "buffer": buffer_value},
+                    "properties": {
+                        "type": "grid_square_buffer",
+                        "bngref": str(bng_value),
+                        "buffer": buffer_value,
+                    },
                 }
                 geometryValue["features"].append(bng_buffer_feature)
 
@@ -294,7 +324,11 @@ def _buffer(geojson, width=0):
                 """SELECT ST_TRANSFORM(
                     ST_BUFFER(ST_TRANSFORM(ST_SETSRID(%s::geometry, 4326), %s), %s),
                 4326)""",
-                (geom.hex.decode("utf-8"), settings.ANALYSIS_COORDINATE_SYSTEM_SRID, width),
+                (
+                    geom.hex.decode("utf-8"),
+                    settings.ANALYSIS_COORDINATE_SYSTEM_SRID,
+                    width,
+                ),
             )
             res = cursor.fetchone()
             geom = GEOSGeometry(res[0], srid=4326)
