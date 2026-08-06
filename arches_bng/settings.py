@@ -25,7 +25,6 @@ WEBPACK_LOADER = {
 
 DATATYPE_LOCATIONS.append("arches_bng.datatypes")
 FUNCTION_LOCATIONS.append("arches_bng.functions")
-ETL_MODULE_LOCATIONS.append("arches_bng.etl_modules")
 SEARCH_COMPONENT_LOCATIONS.append("arches_bng.search.components")
 
 LOCALE_PATHS.insert(0, os.path.join(APP_ROOT, "locale"))
