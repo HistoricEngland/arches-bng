@@ -12,6 +12,7 @@ from tests import test_settings
 # or if using docker
 # python manage.py test tests.bng_datatype_tests.test_bng_datatype --settings="tests.test_settings_for_docker"
 
+
 class BNGCentreDataTypeTests(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -54,13 +55,17 @@ class BNGCentreDataTypeTests(TestCase):
         invalid_value = "NT12345"
         errors = datatype.validate(invalid_value)
         self.assertTrue(len(errors) > 0)
-        self.assertEqual(errors[0]["message"], "Input data must be exactly 12 characters long.")
+        self.assertEqual(
+            errors[0]["message"], "Input data must be exactly 12 characters long."
+        )
 
         # Invalid BNG value (invalid grid square)
         invalid_value = "ZZ1234567890"
         errors = datatype.validate(invalid_value)
         self.assertTrue(len(errors) > 0)
-        self.assertEqual(errors[0]["message"], "Invalid grid square identifier in input data.")
+        self.assertEqual(
+            errors[0]["message"], "Invalid grid square identifier in input data."
+        )
 
         # Invalid BNG value (non-numeric part)
         invalid_value = "NT12345ABCD"

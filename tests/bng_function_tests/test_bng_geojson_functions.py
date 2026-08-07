@@ -124,7 +124,9 @@ class BNGGeoJSONFunctionTests(TestCase):
         geojson_tile = Tile(
             nodegroup_id=function_config["geojson_input_nodegroup"],
             resourceinstance_id=self.resource.resourceinstanceid,
-            data={function_config["geojson_input_node"]: TEST_GEOJSON_POINT_IN_BNG_GRID},
+            data={
+                function_config["geojson_input_node"]: TEST_GEOJSON_POINT_IN_BNG_GRID
+            },
             sortorder=0,
         )
 
@@ -137,7 +139,9 @@ class BNGGeoJSONFunctionTests(TestCase):
         ).first()
         self.assertIsNotNone(bng_tile)
         self.assertIn(function_config["bng_output_node"], bng_tile.data)
-        self.assertTrue(bng_tile.data[function_config["bng_output_node"]].startswith("SP"))
+        self.assertTrue(
+            bng_tile.data[function_config["bng_output_node"]].startswith("SP")
+        )
 
     def test_geojson_to_bngpoint_function_not_in_bng(self):
         """
@@ -151,7 +155,11 @@ class BNGGeoJSONFunctionTests(TestCase):
         geojson_tile = Tile(
             nodegroup_id=function_config["geojson_input_nodegroup"],
             resourceinstance_id=self.resource.resourceinstanceid,
-            data={function_config["geojson_input_node"]: TEST_GEOJSON_POINT_NOT_IN_BNG_GRID},
+            data={
+                function_config[
+                    "geojson_input_node"
+                ]: TEST_GEOJSON_POINT_NOT_IN_BNG_GRID
+            },
             sortorder=0,
         )
 
@@ -195,6 +203,8 @@ class BNGGeoJSONFunctionTests(TestCase):
         self.assertIsNotNone(geojson_tile)
         self.assertIn(function_config["geojson_node"], geojson_tile.data)
         self.assertEqual(
-            geojson_tile.data[function_config["geojson_node"]]["features"][0]["geometry"]["type"],
+            geojson_tile.data[function_config["geojson_node"]]["features"][0][
+                "geometry"
+            ]["type"],
             "Point",
         )
