@@ -6,11 +6,11 @@ from arches.app.models.models import Node
 from arches.app.datatypes.datatypes import DataTypeFactory
 from tests import test_settings
 
-# these tests can be run from the command line via
+
+# These tests can be run from the command line via:
 # python manage.py test tests.bng_datatype_tests.test_bng_datatype --settings="tests.test_settings"
 # or if using docker
 # python manage.py test tests.bng_datatype_tests.test_bng_datatype --settings="tests.test_settings_for_docker"
-
 
 class BNGCentreDataTypeTests(TestCase):
     @classmethod
@@ -20,7 +20,10 @@ class BNGCentreDataTypeTests(TestCase):
         bng_test_model_path = os.path.join(
             test_settings.PROJECT_TEST_ROOT,
             "fixtures",
-            "BNG Test Model.json",
+            "pkg",
+            "graphs",
+            "resource_models",
+            "bng_test_model.json",
         )
 
         with captured_stdout():
