@@ -40,7 +40,9 @@ class Migration(migrations.Migration):
                     search_filter["searchcomponentid"]
                     == "25ca3536-9eb4-4fd5-b2a5-badfd9a266de"
                 ):
-                    standard_search_view.config["linkedSearchFilters"].remove(search_filter)
+                    standard_search_view.config["linkedSearchFilters"].remove(
+                        search_filter
+                    )
             standard_search_view.save()
         except SearchComponent.DoesNotExist:
             # Standard search view doesn't exist (e.g., in test database), skip
