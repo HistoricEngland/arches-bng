@@ -39,45 +39,30 @@ class BNGCentreDataTypeTests(TestCase):
         # Update this node ID to match the actual node ID from the fixture
         self.bng_node_id = Node.objects.filter(datatype="bngcentrepoint").first().nodeid
 
-    def test_bngcentrepoint_validation(self):
-        """
-        Test validation logic for BNGCentreDataType
-        """
+    def _get_datatype(self):
         node = Node.objects.get(nodeid=self.bng_node_id)
-        datatype = DataTypeFactory().get_instance(node.datatype)
+        return DataTypeFactory().get_instance(node.datatype)
 
-        # Valid BNG value
-        valid_value = "NT1234567890"
-        errors = datatype.validate(valid_value)
+    def test_01_bngcentrepoint_validation_valid_value(self):
+        errors = self._get_datatype().validate("NT1234567890")
         self.assertEqual(errors, [])
 
-        # Invalid BNG value (wrong length)
-        invalid_value = "NT12345"
-        errors = datatype.validate(invalid_value)
+    def test_02_bngcentrepoint_validation_wrong_length(self):
+        errors = self._get_datatype().validate("NT12345")
         self.assertTrue(len(errors) > 0)
-        self.assertEqual(
-            errors[0]["message"], "Input data must be exactly 12 characters long."
-        )
+        self.assertEqual(errors[0]["message"], "Input data must be exactly 12 characters long.")
 
-        # Invalid BNG value (invalid grid square)
-        invalid_value = "ZZ1234567890"
-        errors = datatype.validate(invalid_value)
+    def test_03_bngcentrepoint_validation_invalid_grid_square(self):
+        errors = self._get_datatype().validate("ZZ1234567890")
         self.assertTrue(len(errors) > 0)
-        self.assertEqual(
-            errors[0]["message"], "Invalid grid square identifier in input data."
-        )
+        self.assertEqual(errors[0]["message"], "Invalid grid square identifier in input data.")
 
-        # Invalid BNG value (non-numeric part)
-        invalid_value = "NT12345ABCD"
-        errors = datatype.validate(invalid_value)
+    def test_04_bngcentrepoint_validation_non_numeric_part(self):
+        errors = self._get_datatype().validate("NT12345ABCD")
         self.assertTrue(len(errors) > 0)
-        self.assertEqual(
-            errors[0]["message"],
-            "Numeric part of the input data is not a valid integer.",
-        )
+        self.assertEqual(errors[0]["message"], "Numeric part of the input data is not a valid integer.")
 
-        # Completely invalid input
-        invalid_value = 1233445
-        errors = datatype.validate(invalid_value)
+    def test_05_bngcentrepoint_validation_non_string_input(self):
+        errors = self._get_datatype().validate(1233445)
         self.assertTrue(len(errors) > 0)
         self.assertIn("Unexpected error during validation", errors[0]["message"])
