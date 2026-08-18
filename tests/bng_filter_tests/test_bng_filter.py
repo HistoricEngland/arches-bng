@@ -408,8 +408,7 @@ class BngFilterUnitTests(TestCase):
                 )
 
             mock_logger.warn.assert_called_once()
-            # Exception carries a message dict consumed by the Arches search view
-            self.assertIn("message", ctx.exception.args[0])
+            self.assertIn("BNG Filter: BNG is not valid - must be an even number of characters (NT123)", ctx.exception.args[0])
             mock_query.add_query.assert_not_called()
 
     def test_15_append_dsl_with_empty_bng_raises_keyerror(self):
