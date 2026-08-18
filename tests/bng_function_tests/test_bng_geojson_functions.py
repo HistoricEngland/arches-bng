@@ -111,9 +111,6 @@ class BNGGeoJSONFunctionTests(TestCase):
         cls.request.user = User.objects.get(username="admin")
         cls.request.method = "POST"
 
-
-
-
     def test_01_geojson_to_bngpoint_function(self):
         """
         Test the GeoJSONToBNGPoint function's save_bngpoint method
@@ -140,7 +137,9 @@ class BNGGeoJSONFunctionTests(TestCase):
         ).first()
         self.assertIsNotNone(bng_tile)
         self.assertIn(function_config["bng_output_node"], bng_tile.data)
-        self.assertEqual(bng_tile.data[function_config["bng_output_node"]], TEST_BNG_VALUE)
+        self.assertEqual(
+            bng_tile.data[function_config["bng_output_node"]], TEST_BNG_VALUE
+        )
 
     def test_02_geojson_to_bngpoint_function_not_in_bng(self):
         """
