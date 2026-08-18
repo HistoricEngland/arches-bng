@@ -24,7 +24,7 @@ from tests import test_settings
 
 
 # Bletchley Park (https://gridreferencefinder.com/#gr=SP8651233928|51.9970648_s__c__s_-0.7413205|1,SP8651233928|51.9970648_s__c__s_-0.7413205|1)
-TEST_BNG_VALUE = "SP8651233928"
+TEST_BNG_VALUE = "SP8651233927"
 TEST_GEOJSON_POINT_IN_BNG_GRID = {
     "type": "FeatureCollection",
     "features": [
