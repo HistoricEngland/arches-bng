@@ -1,6 +1,6 @@
 import uuid
 import os
-from django.test import TransactionTestCase, TestCase
+from django.test import TestCase
 from django.core import management
 from django.test.client import RequestFactory
 from django.contrib.auth.models import User
@@ -82,11 +82,10 @@ FUNCTION_CONFIG_GEOJSON_TO_BNG = {
 
 class BNGGeoJSONFunctionTests(TestCase):
 
-    serialized_rollback = True
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
 
-    def setUp(self):
-
-        # Load the BNG test model
         bng_test_model_path = os.path.join(
             test_settings.PROJECT_TEST_ROOT,
             "fixtures",
@@ -104,16 +103,18 @@ class BNGGeoJSONFunctionTests(TestCase):
                 verbosity=0,
             )
 
-        self.graph = Graph.objects.get(pk="07dfd81a-f971-4a07-b7df-52f11e6cc2bd")
-        self.resource = Resource(resourceinstanceid=uuid.uuid4(), graph=self.graph)
-        self.resource.save()
+        cls.graph = Graph.objects.get(pk="07dfd81a-f971-4a07-b7df-52f11e6cc2bd")
+        cls.resource = Resource(resourceinstanceid=uuid.uuid4(), graph=cls.graph)
+        cls.resource.save()
 
-        # Create a mock request object
-        self.request = RequestFactory().get(reverse("tile"))
-        self.request.user = User.objects.get(username="admin")
-        self.request.method = "POST"
+        cls.request = RequestFactory().get(reverse("tile"))
+        cls.request.user = User.objects.get(username="admin")
+        cls.request.method = "POST"
 
-    def test_geojson_to_bngpoint_function(self):
+
+
+
+    def test_01_geojson_to_bngpoint_function(self):
         """
         Test the GeoJSONToBNGPoint function's save_bngpoint method
         """
@@ -139,11 +140,9 @@ class BNGGeoJSONFunctionTests(TestCase):
         ).first()
         self.assertIsNotNone(bng_tile)
         self.assertIn(function_config["bng_output_node"], bng_tile.data)
-        self.assertTrue(
-            bng_tile.data[function_config["bng_output_node"]].startswith("SP")
-        )
+        self.assertEqual(bng_tile.data[function_config["bng_output_node"]], TEST_BNG_VALUE)
 
-    def test_geojson_to_bngpoint_function_not_in_bng(self):
+    def test_02_geojson_to_bngpoint_function_not_in_bng(self):
         """
         Test the GeoJSONToBNGPoint function does not save BNG for points outside the BNG grid and does not
         raise an error
@@ -178,7 +177,7 @@ class BNGGeoJSONFunctionTests(TestCase):
             ).first()
         )
 
-    def test_bngpoint_to_geojson_function(self):
+    def test_03_bngpoint_to_geojson_function(self):
         """
         Test the BNGPointToGeoJSON function's save_geojson method
         """
