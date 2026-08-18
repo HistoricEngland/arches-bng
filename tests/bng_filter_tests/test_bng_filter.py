@@ -378,9 +378,8 @@ class BngFilterUnitTests(TestCase):
         This test verifies:
         - BNG values must have an even number of characters (2 grid square + even number digits)
         - When an odd-length BNG is provided (e.g., "NT123"), a warning is logged
-        - The method gracefully handles invalid input without raising exceptions
+        - The method raises an Exception with a message dict for the Arches search framework
         - Validation of BNG format happens before geometry processing
-        - No DSL query is added when BNG validation fails
         """
         request = self.factory.get(
             "/search",
@@ -396,22 +395,22 @@ class BngFilterUnitTests(TestCase):
         )
         self.bng_filter.request = request
 
-        # Mock the search_query_object with a proper query builder
         mock_query = Mock()
         search_query_object = {"query": mock_query}
         permitted_nodegroups = ["nodegroup1"]
 
         with patch("arches_bng.search.components.bng_filter.logger") as mock_logger:
-            self.bng_filter.append_dsl(
-                search_query_object,
-                permitted_nodegroups=permitted_nodegroups,
-                include_provisional=False,
-            )
+            with self.assertRaises(Exception) as ctx:
+                self.bng_filter.append_dsl(
+                    search_query_object,
+                    permitted_nodegroups=permitted_nodegroups,
+                    include_provisional=False,
+                )
 
-            # Verify a warning was logged for invalid BNG
             mock_logger.warn.assert_called_once()
-            # add_query should still be called even with invalid BNG (with empty Bool)
-            mock_query.add_query.assert_called_once()
+            # Exception carries a message dict consumed by the Arches search view
+            self.assertIn("message", ctx.exception.args[0])
+            mock_query.add_query.assert_not_called()
 
     def test_15_append_dsl_with_empty_bng_raises_keyerror(self):
         """
@@ -658,8 +657,8 @@ class BngFilterUnitTests(TestCase):
         grid_square = search_query_object["bng-filter"]["grid_square"]
         self.assertEqual(grid_square["type"], "FeatureCollection")
         self.assertGreater(len(grid_square["features"]), 0)
-        # The bngref should show it was normalized to uppercase
-        self.assertIn("bngref", grid_square["features"][0]["properties"])
+        # The bngref should be normalized to uppercase
+        self.assertEqual(grid_square["features"][0]["properties"]["bngref"], "NT1234")
 
         # Verify add_query was called with a Bool query
         mock_query.add_query.assert_called_once()
