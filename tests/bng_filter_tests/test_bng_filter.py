@@ -1,13 +1,9 @@
 import json
-import logging
-from unittest import mock
-from unittest.mock import MagicMock, Mock, patch
-from django.test import TestCase, RequestFactory, TransactionTestCase
-from django.contrib.gis.geos import GEOSGeometry, Point, Polygon
-from django.db import connection
-from arches.app.utils.betterJSONSerializer import JSONDeserializer, JSONSerializer
-from arches.app.search.elasticsearch_dsl_builder import Bool, Nested, Terms, GeoShape
-from arches_bng.search.components.bng_filter import BngFilter, details, _buffer
+from unittest.mock import Mock, patch
+from django.test import TestCase, RequestFactory
+from django.contrib.gis.geos import GEOSGeometry
+from arches.app.search.elasticsearch_dsl_builder import Bool
+from arches_bng.search.components.bng_filter import BngFilter, details
 
 # These tests can be run from the command line via:
 # python manage.py test tests.bng_filter_tests.test_bng_filter --settings="tests.test_settings"
