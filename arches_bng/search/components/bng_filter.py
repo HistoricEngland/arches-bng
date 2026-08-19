@@ -86,11 +86,11 @@ class BngFilter(BaseSearchFilter):
 
                     search_query.filter(Nested(path="geometries", query=spatial_query))
         else:
-            logger.warn(
-                _(
-                    f"BNG Filter: BNG is not valid - must be an even number of chars ({bng})"
-                )
+            msg = _(
+                f"BNG Filter: BNG is not valid - must be an even number of characters ({bng})"
             )
+            logger.warn(msg)
+            raise Exception(msg)
 
         search_query_object["query"].add_query(search_query)
 
